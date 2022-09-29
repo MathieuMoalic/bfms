@@ -1,11 +1,11 @@
 [package]
-name = "rust-ext"
+name = "bfms"
 version = "0.1.0"
-authors = ["Toshiki Teramura <toshiki.teramura@gmail.com>", "Yuji Kanagawa <yuji.kngw.80s.revive@gmail.com>"]
-edition = "2018"
+authors = ["Mathieu Moalic <matmoa@pm.me>"]
+edition = "2021"
 
 [lib]
-name = "rust_ext"
+name = "bfms"
 crate-type = ["cdylib"]
 
 [dependencies]

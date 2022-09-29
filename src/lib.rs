@@ -14,7 +14,7 @@ use pyo3::{
 };
 
 #[pymodule]
-fn rust_ext(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn bfms(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     // example using generic PyObject
     fn head(x: ArrayViewD<'_, PyObject>) -> PyResult<PyObject> {
         x.get(0)

@@ -1,5 +1,5 @@
 import numpy as np
-from rust_ext import (
+from bfms import (
     head,
     axpy,
     conj,
