@@ -1,11 +1,11 @@
 [package]
-name = "bfms"
+name = "gwarell"
 version = "0.1.0"
 authors = ["Mathieu Moalic <matmoa@pm.me>"]
 edition = "2021"
 
 [lib]
-name = "bfms"
+name = "gwarell"
 crate-type = ["cdylib"]
 
 [dependencies]

@@ -1,4 +1,5 @@
 use std::ops::Add;
+use std::sync::Arc;
 
 use numpy::ndarray::{Array1, ArrayD, ArrayView1, ArrayViewD, ArrayViewMutD, Zip};
 use numpy::{
@@ -6,15 +7,60 @@ use numpy::{
     Complex64, IntoPyArray, PyArray1, PyArrayDyn, PyReadonlyArray1, PyReadonlyArrayDyn,
     PyReadwriteArray1, PyReadwriteArrayDyn,
 };
+use pyo3::prelude::*;
+use pyo3::types::{PyDict, PyTuple};
 use pyo3::{
-    exceptions::PyIndexError,
-    pymodule,
-    types::{PyDict, PyModule},
-    FromPyObject, PyAny, PyObject, PyResult, Python,
+    exceptions::PyIndexError, pymodule, types::PyModule, FromPyObject, PyAny, PyObject, PyResult,
+    Python,
 };
 
+#[pyclass]
+struct Sim {
+    #[pyo3(get, set)]
+    num: i32,
+    #[pyo3(get, set)]
+    name: String,
+    #[pyo3(get, set)]
+    m: Arc<Option<PyArray1<f64>>>,
+}
+
+#[pymethods]
+impl Sim {
+    #[new]
+    #[args(num = "-1")]
+    fn new(num: i32, name: String) -> Self {
+        Sim {
+            num,
+            name,
+            m: todo!(),
+        }
+    }
+
+    fn __call__(&self) -> String {
+        format!("{:?}", self.num)
+    }
+
+    #[args(num = "10", py_args = "*", name = "\"Hello\"", py_kwargs = "**")]
+    fn method(
+        &mut self,
+        num: i32,
+        name: &str,
+        py_args: &PyTuple,
+        py_kwargs: Option<&PyDict>,
+    ) -> String {
+        let num_before = self.num;
+        self.num = num;
+        format!(
+            "py_args={:?}, py_kwargs={:?}, name={}, num={} num_before={}",
+            py_args, py_kwargs, name, self.num, num_before,
+        )
+    }
+    // #[args(m)]
+}
+
 #[pymodule]
-fn bfms(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn gwarell(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    m.add_class::<Sim>()?;
     // example using generic PyObject
     fn head(x: ArrayViewD<'_, PyObject>) -> PyResult<PyObject> {
         x.get(0)
@@ -75,6 +121,7 @@ fn bfms(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     // wrapper of `conj`
     #[pyfn(m)]
     #[pyo3(name = "conj")]
+    #[pyo3(text_signature = "(py,x,/)")]
     fn conj_py<'py>(
         py: Python<'py>,
         x: PyReadonlyArrayDyn<'_, Complex64>,

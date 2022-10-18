@@ -1,5 +1,5 @@
 import numpy as np
-from bfms import (
+from gwarell import (
     head,
     axpy,
     conj,
@@ -7,7 +7,17 @@ from bfms import (
     extract,
     add_minutes_to_seconds,
     polymorphic_add,
+    Sim,
 )
+
+
+def test_sim():
+    s = Sim(12, "hi")
+    print(s())
+    # print(s.num, s.name)
+    # print(s.method(44, False, "World", 666, x=44, y=55))
+    # print(help(conj))
+    # s.m = np.ones((3,3))
 
 
 def test_head():
